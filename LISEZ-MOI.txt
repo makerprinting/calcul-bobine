@@ -1,0 +1,9 @@
+CALCUL BOBINE V2 — VERSION RACINE
+Placez directement à la racine du dépôt GitHub :
+index.html
+manifest.webmanifest
+sw.js
+icon-192.png
+icon-512.png
+
+Aucun dossier icons n'est nécessaire.
