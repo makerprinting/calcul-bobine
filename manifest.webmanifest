@@ -1,0 +1,9 @@
+{
+  "name": "Calcul Bobine",
+  "short_name": "Bobine",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#1f2937",
+  "description": "Calcul du métrage restant ou du diamètre d'une bobine de papier."
+}
