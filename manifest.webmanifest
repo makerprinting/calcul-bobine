@@ -3,7 +3,7 @@
   "name": "Calcul Bobine",
   "short_name": "Bobine",
   "description": "Calculateur de bobines papier",
-  "start_url": "./?pwa=21",
+  "start_url": "./?pwa=22",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f4f6",
