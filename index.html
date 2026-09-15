@@ -1,77 +1,9 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#1f2937">
-<link rel="manifest" href="manifest.webmanifest">
-<title>Calcul Bobine</title>
-<style>
-:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#111827;background:#f3f4f6}
-*{box-sizing:border-box} body{margin:0;padding:18px} .app{max-width:520px;margin:auto}
-h1{font-size:24px;margin:4px 0 16px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
-button{border:0;border-radius:12px;min-height:52px;font-size:16px;font-weight:700;padding:10px}
-.tab{background:#e5e7eb;color:#374151}.tab.active,.calc{background:#1f2937;color:white}
-.card{background:white;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px #0001}
-label{display:block;font-size:14px;font-weight:650;margin:14px 0 6px}
-.row{display:flex;align-items:center;gap:10px} input{width:100%;font-size:20px;padding:12px;border:1px solid #d1d5db;border-radius:10px}
-.unit{width:40px;color:#6b7280}.calc{width:100%;margin-top:18px}
-.result{text-align:center}.result small{color:#6b7280}.value{font-size:36px;font-weight:800;margin:6px 0}.detail{font-size:13px;color:#6b7280;line-height:1.4}
-.err{color:#991b1b;background:#fee2e2;border-radius:10px;padding:10px;margin-top:12px;display:none}
-.note{font-size:12px;color:#6b7280;line-height:1.4}
-</style>
-</head>
-<body>
-<main class="app">
-<h1>Calcul Bobine</h1>
-<div class="tabs">
-<button id="tLen" class="tab active">Diamètre → mètres</button>
-<button id="tDia" class="tab">Mètres → diamètre</button>
-</div>
-<form id="form" class="card">
-<label id="mainLabel" for="main">Diamètre extérieur de la bobine</label>
-<div class="row"><input id="main" type="number" inputmode="decimal" step="0.1" value="847"><span id="mainUnit" class="unit">mm</span></div>
-<label for="core">Diamètre du mandrin</label>
-<div class="row"><input id="core" type="number" inputmode="decimal" step="0.1" value="108"><span class="unit">mm</span></div>
-<label for="thick">Épaisseur du papier</label>
-<div class="row"><input id="thick" type="number" inputmode="decimal" step="0.1" value="54"><span class="unit">µm</span></div>
-<button class="calc" type="submit">CALCULER</button>
-<div id="err" class="err"></div>
-</form>
-<section class="card result" aria-live="polite">
-<small id="resultLabel">Métrage estimé restant</small>
-<div id="result" class="value">—</div>
-<div id="detail" class="detail"></div>
-</section>
-<p class="note">Résultat théorique. La compression, la tension d'enroulement et l'épaisseur réelle du papier peuvent créer un léger écart.</p>
-</main>
-<script>
-if ('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
-const $=id=>document.getElementById(id);
-let mode='length';
-const fmt0=n=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(n);
-const fmt1=n=>new Intl.NumberFormat('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1}).format(n);
-function setMode(m){
- mode=m; $('tLen').classList.toggle('active',m==='length'); $('tDia').classList.toggle('active',m==='diameter');
- $('mainLabel').textContent=m==='length'?'Diamètre extérieur de la bobine':'Métrage de papier';
- $('mainUnit').textContent=m==='length'?'mm':'m'; $('main').value=m==='length'?'847':'10265';
- $('resultLabel').textContent=m==='length'?'Métrage estimé restant':'Diamètre extérieur estimé'; calc();
-}
-function calc(){
- const x=Number($('main').value), c=Number($('core').value), u=Number($('thick').value), err=$('err');
- err.style.display='none';
- if(![x,c,u].every(Number.isFinite)||x<=0||c<=0||u<=0){err.textContent='Saisissez trois valeurs positives.';err.style.display='block';$('result').textContent='—';return}
- const t=u/1000;
- if(mode==='length'){
-  if(x<=c){err.textContent='Le diamètre extérieur doit être supérieur au mandrin.';err.style.display='block';$('result').textContent='—';return}
-  const L=Math.PI*(x*x-c*c)/(4*t)/1000;
-  $('result').textContent=fmt0(L)+' m'; $('detail').textContent=`Bobine Ø ${fmt1(x)} mm • mandrin Ø ${fmt1(c)} mm • papier ${fmt1(u)} µm`;
- } else {
-  const D=Math.sqrt(c*c+(4*t*x*1000)/Math.PI);
-  $('result').textContent='Ø '+fmt1(D)+' mm'; $('detail').textContent=`${fmt0(x)} m • mandrin Ø ${fmt1(c)} mm • papier ${fmt1(u)} µm`;
- }
-}
-$('tLen').onclick=()=>setMode('length'); $('tDia').onclick=()=>setMode('diameter');
-$('form').onsubmit=e=>{e.preventDefault();calc()}; calc();
-</script>
-</body></html>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f2937"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/icon-192.png"><title>Calcul Bobine</title><style>
+*{box-sizing:border-box}:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#111827;background:#f3f4f6}body{margin:0;padding:18px}main{max-width:540px;margin:auto}header{display:flex;gap:12px;align-items:center;margin-bottom:16px}header img{width:52px;border-radius:12px}h1{margin:0;font-size:26px}header small,.note,.detail{color:#6b7280}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}button{border:0;border-radius:12px;min-height:54px;font-size:16px;font-weight:750;padding:10px}.tab{background:#e5e7eb;color:#374151}.active,.calc{background:#1f2937;color:white}.card{background:white;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px #0001}label{display:block;font-size:14px;font-weight:700;margin:14px 0 6px}select,input{width:100%;min-height:52px;border:1px solid #d1d5db;border-radius:10px;background:white;padding:12px;font-size:18px}.row{display:flex;align-items:center;gap:10px}.unit{width:40px;color:#6b7280}.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.pill{background:#f3f4f6;border-radius:999px;padding:7px 10px;font-size:13px;color:#4b5563}.calc{width:100%;margin-top:18px}.result{text-align:center}.value{font-size:38px;font-weight:850;margin:7px 0}.detail{font-size:13px;line-height:1.5}.err{display:none;background:#fee2e2;color:#991b1b;padding:10px;border-radius:10px;margin-top:12px}.note{font-size:12px;line-height:1.45}</style></head><body><main>
+<header><img src="./icons/icon-192.png" alt=""><div><h1>Calcul Bobine</h1><small>Calculateur atelier • mandrin Ø 120 mm</small></div></header>
+<div class="tabs"><button id="a" class="tab active" type="button">Diamètre → mètres</button><button id="b" class="tab" type="button">Mètres → diamètre</button></div>
+<form id="f" class="card"><label for="paper">Papier</label><select id="paper"><option value="54">BURGO 45g — 54 µm</option><option value="90">OFFSET Premium 70g — 90 µm</option><option value="115">DNS 90g — 115 µm</option><option value="153">DNS 120g — 153 µm</option><option value="95">NEUJET 90g — 95 µm</option><option value="140">MUNKEN White 80g — 140 µm</option><option value="158">MUNKEN Cream 90g — 158 µm</option><option value="118">NAUTILUS SuperWhite 90g — 118 µm</option></select><div class="pills"><span id="ep" class="pill">Épaisseur : 54 µm</span><span class="pill">Mandrin : Ø 120 mm</span></div><label id="lab" for="x">Diamètre extérieur de la bobine</label><div class="row"><input id="x" type="number" inputmode="decimal" step="0.1" value="847"><span id="unit" class="unit">mm</span></div><button class="calc">CALCULER</button><div id="err" class="err"></div></form>
+<section class="card result"><small id="rl">Métrage estimé restant</small><div id="res" class="value">—</div><div id="det" class="detail"></div></section><p class="note">Estimation géométrique. La tension d’enroulement, la compression et les variations réelles du support peuvent entraîner un léger écart.</p>
+</main><script>
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));const $=i=>document.getElementById(i),C=120;let m='l';const n0=n=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(n),n1=n=>new Intl.NumberFormat('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1}).format(n);function pn(){return $('paper').options[$('paper').selectedIndex].text.split(' — ')[0]}function mode(q){m=q;$('a').classList.toggle('active',q==='l');$('b').classList.toggle('active',q==='d');$('lab').textContent=q==='l'?'Diamètre extérieur de la bobine':'Métrage de papier';$('unit').textContent=q==='l'?'mm':'m';$('x').value=q==='l'?847:10000;$('rl').textContent=q==='l'?'Métrage estimé restant':'Diamètre extérieur estimé';calc()}function calc(){let x=+$('x').value,u=+$('paper').value,e=$('err');e.style.display='none';$('ep').textContent='Épaisseur : '+u+' µm';if(!(x>0)){e.textContent='Saisissez une valeur positive.';e.style.display='block';$('res').textContent='—';return}let t=u/1000;if(m==='l'){if(x<=C){e.textContent='Le diamètre doit être supérieur à 120 mm.';e.style.display='block';return}let L=Math.PI*(x*x-C*C)/(4*t)/1000;$('res').textContent=n0(L)+' m';$('det').textContent=pn()+' • '+u+' µm • bobine Ø '+n1(x)+' mm • mandrin Ø 120 mm'}else{let D=Math.sqrt(C*C+4*t*x*1000/Math.PI);$('res').textContent='Ø '+n1(D)+' mm';$('det').textContent=pn()+' • '+u+' µm • '+n0(x)+' m • mandrin Ø 120 mm'}}$('a').onclick=()=>mode('l');$('b').onclick=()=>mode('d');$('paper').onchange=calc;$('f').onsubmit=e=>{e.preventDefault();calc()};calc();
+</script></body></html>
