@@ -3,7 +3,7 @@
   "name": "Atelier",
   "short_name": "Atelier",
   "description": "Outils atelier",
-  "start_url": "./?pwa=42",
+  "start_url": "./?pwa=43",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f4f6",
